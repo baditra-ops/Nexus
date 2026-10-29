@@ -52,7 +52,7 @@ export async function verifyMemberAction(
   const nowIso = new Date().toISOString();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: updateError } = await (supabase.from("profiles") as any)
+  let { error: updateError } = await (supabase.from("profiles") as any)
     .update({
       verification_status: newStatus,
       verification_notes: notes?.trim() || null,
@@ -61,6 +61,19 @@ export async function verifyMemberAction(
       updated_at: nowIso,
     })
     .eq("id", memberId);
+
+  if (updateError && updateError.message.includes("verification_notes")) {
+    console.warn("[AdminAction] Fallback: profiles lacks verification_notes column, retrying");
+    const retry = await (supabase.from("profiles") as any)
+      .update({
+        verification_status: newStatus,
+        verified_by: user.id,
+        verified_at: nowIso,
+        updated_at: nowIso,
+      })
+      .eq("id", memberId);
+    updateError = retry.error;
+  }
 
   if (updateError) {
     console.error("[AdminAction] Verify error:", updateError.message);

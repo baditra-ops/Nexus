@@ -69,26 +69,41 @@ export async function createResourceAction(
 
   const supabase = await createClient();
 
-  const { data: insertedResource, error: insertError } = await (
+  const baseResourceData = {
+    owner_id: user.id,
+    institution_id: institutionId || null,
+    title,
+    description,
+    category,
+    location,
+    images: images,
+    eligibility_requirements: eligibilityRequirements,
+    usage_rules: usageRules,
+    deposit_amount: depositAmount,
+    currency,
+    status,
+  };
+
+  let { data: insertedResource, error: insertError } = await (
     supabase.from("resources") as any // eslint-disable-line @typescript-eslint/no-explicit-any
   )
     .insert({
-      owner_id: user.id,
-      institution_id: institutionId || null,
-      title,
-      description,
-      category,
+      ...baseResourceData,
       resource_type: resourceType,
-      location,
-      images: images,
-      eligibility_requirements: eligibilityRequirements,
-      usage_rules: usageRules,
-      deposit_amount: depositAmount,
-      currency,
-      status,
     })
     .select("id")
     .single();
+
+  // Schema resilience: Fallback if remote table lacks resource_type column
+  if (insertError && insertError.message.includes("resource_type")) {
+    console.warn("[ResourceAction] Fallback: resources table lacks resource_type column, retrying without it");
+    const retry = await (supabase.from("resources") as any)
+      .insert(baseResourceData)
+      .select("id")
+      .single();
+    insertedResource = retry.data;
+    insertError = retry.error;
+  }
 
   if (insertError || !insertedResource) {
     console.error("[ResourceAction] Insert error:", insertError?.message);
@@ -182,25 +197,38 @@ export async function updateResourceAction(
     }
   }
 
-  const { error: updateError } = await (
+  const baseUpdateData = {
+    title,
+    description,
+    category,
+    location,
+    institution_id: institutionId || null,
+    eligibility_requirements: eligibilityRequirements,
+    usage_rules: usageRules,
+    deposit_amount: depositAmount,
+    currency,
+    status,
+    images,
+    updated_at: new Date().toISOString(),
+  };
+
+  let { error: updateError } = await (
     supabase.from("resources") as any // eslint-disable-line @typescript-eslint/no-explicit-any
   )
     .update({
-      title,
-      description,
-      category,
+      ...baseUpdateData,
       resource_type: resourceType,
-      location,
-      institution_id: institutionId || null,
-      eligibility_requirements: eligibilityRequirements,
-      usage_rules: usageRules,
-      deposit_amount: depositAmount,
-      currency,
-      status,
-      images,
-      updated_at: new Date().toISOString(),
     })
     .eq("id", resourceId);
+
+  // Schema resilience: Fallback if remote table lacks resource_type column
+  if (updateError && updateError.message.includes("resource_type")) {
+    console.warn("[ResourceAction] Fallback: resources table lacks resource_type column on update, retrying without it");
+    const retry = await (supabase.from("resources") as any)
+      .update(baseUpdateData)
+      .eq("id", resourceId);
+    updateError = retry.error;
+  }
 
   if (updateError) {
     return { error: `Update failed: ${updateError.message}` };

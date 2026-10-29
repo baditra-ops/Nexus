@@ -84,13 +84,24 @@ export async function requestVerificationAction(
   if (rpcError) {
     // Fallback to direct update
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: updateError } = await (supabase.from("profiles") as any)
+    let { error: updateError } = await (supabase.from("profiles") as any)
       .update({
         verification_status: "pending",
         verification_notes: notes || null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
+
+    if (updateError && updateError.message.includes("verification_notes")) {
+      console.warn("[ProfileAction] Fallback: profiles lacks verification_notes column, retrying");
+      const retry = await (supabase.from("profiles") as any)
+        .update({
+          verification_status: "pending",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", user.id);
+      updateError = retry.error;
+    }
 
     if (updateError) {
       return { error: `Failed to submit verification request: ${updateError.message}` };
