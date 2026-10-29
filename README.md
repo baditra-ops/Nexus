@@ -209,3 +209,29 @@ npm run build
 | **"Insufficient Historical Operational Data" (HTTP 422)** | There are fewer than 5 booking records for utilization analysis, or fewer than 14 daily records for demand forecasting. | This is by design to prevent fabricating fake statistics. Click **"Inspect Sample Benchmark Dataset (Demo Mode)"** to inspect development benchmark metrics clearly labeled as demo data. |
 | **Python wheel compilation error during `pip install`** | Python 3.14+ was used before precompiled C-extension binary wheels were published for `scikit-learn` or `scipy`. | Use Python 3.11 (`py -3.11 -m venv venv`), which downloads official precompiled wheels instantly without requiring MSVC build tools. |
 | **"Authentication Required" on AI Endpoints** | An unauthenticated client called `/api/ai/recommendations` or `/api/ai/utilization`. | Sign in via `/auth/sign-in`. AI endpoints enforce session verification and institutional role checks. |
+
+---
+
+## Production Deployment
+
+Nexus is production-ready and can be deployed using either **Docker Compose** (all-in-one stack) or **Vercel + Render** (serverless + microservice).
+
+### Method 1: Docker Compose (Single Host / VM / AWS EC2)
+```bash
+# 1. Provide environment variables in .env
+cp .env.example .env
+
+# 2. Build and launch containers
+docker compose up -d --build
+
+# 3. Verify health
+curl http://localhost:3000/api/health
+curl http://localhost:8000/health
+```
+
+### Method 2: Vercel (Web App) + Render (AI Microservice)
+1. **Next.js Web Frontend**: Connect repository to [Vercel](https://vercel.com) using the root directory. Vercel automatically applies [`vercel.json`](file:///e:/Nexus/vercel.json) with security headers.
+2. **AI Microservice**: Connect repository to [Render](https://render.com) using `ai-service/` as root directory (`uvicorn api.main:app --host 0.0.0.0 --port $PORT`).
+3. Set `AI_SERVICE_URL` in Vercel to your Render service endpoint.
+4. Set Supabase URL and anon/service keys in both environments.
+
