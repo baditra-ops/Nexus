@@ -16,9 +16,13 @@ interface UserState {
   unreadCount?: number;
 }
 
+let cachedUserState: UserState | null | undefined = undefined;
+
 export function UserNavCard() {
-  const [user, setUser] = React.useState<UserState | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  const [user, setUser] = React.useState<UserState | null>(
+    cachedUserState !== undefined ? cachedUserState : null
+  );
+  const [loading, setLoading] = React.useState(cachedUserState === undefined);
 
   React.useEffect(() => {
     const supabase = createClient();
@@ -45,18 +49,22 @@ export function UserNavCard() {
 
           const profile = data as { full_name?: string | null; role?: string; verification_status?: string } | null;
 
-          setUser({
+          const resolved: UserState = {
             id: authUser.id,
             email: authUser.email,
             fullName: profile?.full_name || authUser.user_metadata?.full_name || "Member",
             role: profile?.role || "member",
             verificationStatus: profile?.verification_status || "unverified",
             unreadCount: unreadCount || 0,
-          });
+          };
+          cachedUserState = resolved;
+          setUser(resolved);
         } else {
+          cachedUserState = null;
           setUser(null);
         }
       } catch {
+        cachedUserState = null;
         setUser(null);
       } finally {
         setLoading(false);

@@ -182,7 +182,8 @@ export async function decideBookingAction(
       end_time,
       resource:resources (
         owner_id,
-        title
+        title,
+        institution_id
       )
     `
     )
@@ -193,12 +194,28 @@ export async function decideBookingAction(
     return { success: false, error: "Booking record not found." };
   }
 
+  // Check caller role & permissions
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: callerProfile } = await (supabase.from("profiles") as any)
+    .select("role, institution_id")
+    .eq("id", user.id)
+    .single();
+
   const isOwner = booking.resource?.owner_id === user.id;
-  if (!isOwner) {
-    return { success: false, error: "Unauthorized: Only the resource custodian can authorize reservations." };
+  const isPlatformAdmin = callerProfile?.role === "admin";
+  const isInstitutionAdmin =
+    callerProfile?.role === "institution_admin" &&
+    Boolean(callerProfile?.institution_id) &&
+    callerProfile.institution_id === booking.resource?.institution_id;
+
+  if (!isOwner && !isPlatformAdmin && !isInstitutionAdmin) {
+    return {
+      success: false,
+      error: "Unauthorized: Only the apparatus custodian or institutional administrator can authorize reservations.",
+    };
   }
 
-  if (booking.borrower_id === user.id) {
+  if (booking.borrower_id === user.id && !isPlatformAdmin && !isInstitutionAdmin) {
     return { success: false, error: "You cannot approve your own booking." };
   }
 

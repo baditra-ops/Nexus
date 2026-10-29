@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "./server";
 import type { Database } from "@/types/database.types";
 import { redirect } from "next/navigation";
@@ -6,37 +7,39 @@ export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 /**
  * Retrieves the current authenticated user and their profile on the server.
- * Uses supabase.auth.getUser() which validates the token with Supabase Auth servers.
+ * Uses React cache for per-request memoization across layout, page, and server components.
  */
-export async function getCurrentUser(): Promise<{
-  user: { id: string; email?: string } | null;
-  profile: Profile | null;
-}> {
-  const supabase = await createClient();
+export const getCurrentUser = cache(
+  async (): Promise<{
+    user: { id: string; email?: string } | null;
+    profile: Profile | null;
+  }> => {
+    const supabase = await createClient();
 
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
-  if (authError || !user) {
-    return { user: null, profile: null };
+    if (authError || !user) {
+      return { user: null, profile: null };
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+      },
+      profile: profile || null,
+    };
   }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-    },
-    profile: profile || null,
-  };
-}
+);
 
 /**
  * Asserts that a user is authenticated. If not, redirects to the sign-in page.

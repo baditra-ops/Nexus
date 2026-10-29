@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type {
   ResourceFilterParams,
@@ -173,9 +174,9 @@ export async function getMyResources(userId: string): Promise<ResourceWithRelati
 }
 
 /**
- * Retrieves all institutions for dropdown selects.
+ * Retrieves all institutions for dropdown selects (memoized per-request).
  */
-export async function getInstitutions(): Promise<DbInstitution[]> {
+export const getInstitutions = cache(async (): Promise<DbInstitution[]> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -189,12 +190,12 @@ export async function getInstitutions(): Promise<DbInstitution[]> {
   }
 
   return data || [];
-}
+});
 
 /**
- * Count of published resources for overview metrics.
+ * Count of published resources for overview metrics (memoized per-request).
  */
-export async function getPublishedResourceCount(): Promise<number> {
+export const getPublishedResourceCount = cache(async (): Promise<number> => {
   const supabase = await createClient();
 
   const { count, error } = await supabase
@@ -204,4 +205,4 @@ export async function getPublishedResourceCount(): Promise<number> {
 
   if (error) return 0;
   return count || 0;
-}
+});

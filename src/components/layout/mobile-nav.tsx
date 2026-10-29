@@ -148,7 +148,7 @@ export function MobileNav() {
 
         <div className="p-3 border-t border-slate-100 dark:border-slate-900">
           <React.Suspense fallback={<div className="h-14 bg-slate-100 dark:bg-slate-800 rounded-xl animate-pulse" />}>
-            <UserNavCard />
+            {isOpen && <UserNavCard />}
           </React.Suspense>
         </div>
       </div>

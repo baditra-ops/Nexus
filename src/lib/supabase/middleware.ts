@@ -40,8 +40,22 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  // Check if any Supabase auth cookies are present before making a remote network call
+  const allCookies = request.cookies.getAll();
+  const hasAuthCookie = allCookies.some(
+    (c) => c.name.startsWith("sb-") && (c.name.includes("-auth-token") || c.name.includes("token"))
+  );
+
+  if (!hasAuthCookie) {
+    return supabaseResponse;
+  }
+
   // Refresh auth token if present
-  await supabase.auth.getUser();
+  try {
+    await supabase.auth.getUser();
+  } catch {
+    // Session refresh failure is handled downstream by auth guards
+  }
 
   return supabaseResponse;
 }

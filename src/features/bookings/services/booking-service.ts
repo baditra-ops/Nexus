@@ -126,7 +126,42 @@ export async function getMyBookings(
 }
 
 /**
- * Retrieves bookings awaiting authorization or inspection for resources managed by the current custodian.
+ * Resolves resource IDs manageable by user based on their institutional role:
+ * - admin: all resources
+ * - institution_admin: all resources in their institution plus personally owned
+ * - resource_owner / member: resources owned by user
+ */
+export async function getManageableResourceIds(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  userId: string
+): Promise<string[]> {
+  const { data: profile } = await (supabase.from("profiles") as any)
+    .select("role, institution_id")
+    .eq("id", userId)
+    .single();
+
+  if (profile?.role === "admin") {
+    const { data: allResources } = await (supabase.from("resources") as any).select("id");
+    return (allResources || []).map((r: { id: string }) => r.id);
+  }
+
+  if (profile?.role === "institution_admin" && profile?.institution_id) {
+    const { data: instResources } = await (supabase.from("resources") as any)
+      .select("id")
+      .or(`institution_id.eq.${profile.institution_id},owner_id.eq.${userId}`);
+    return (instResources || []).map((r: { id: string }) => r.id);
+  }
+
+  const { data: ownedResources } = await (supabase.from("resources") as any)
+    .select("id")
+    .eq("owner_id", userId);
+
+  return (ownedResources || []).map((r: { id: string }) => r.id);
+}
+
+/**
+ * Retrieves bookings awaiting authorization or inspection for resources managed by the current custodian or administrator.
  */
 export async function getManagedApprovals(
   userId: string,
@@ -134,17 +169,11 @@ export async function getManagedApprovals(
 ): Promise<BookingWithRelations[]> {
   const supabase = await createClient();
 
-  // Find all resources owned by user
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PostgREST select query
-  const { data: ownedResources, error: resError } = await (supabase.from("resources") as any)
-    .select("id")
-    .eq("owner_id", userId);
+  const resourceIds = await getManageableResourceIds(supabase, userId);
 
-  if (resError || !ownedResources || ownedResources.length === 0) {
+  if (!resourceIds || resourceIds.length === 0) {
     return [];
   }
-
-  const resourceIds = ownedResources.map((r: { id: string }) => r.id);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PostgREST complex join inference workaround
   let query = (supabase.from("bookings") as any)
@@ -355,16 +384,12 @@ export async function getCustodianActionCounts(userId: string): Promise<{
 }> {
   const supabase = await createClient();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PostgREST select query
-  const { data: ownedResources } = await (supabase.from("resources") as any)
-    .select("id")
-    .eq("owner_id", userId);
+  const resourceIds = await getManageableResourceIds(supabase, userId);
 
-  if (!ownedResources || ownedResources.length === 0) {
+  if (!resourceIds || resourceIds.length === 0) {
     return { pendingRequests: 0, awaitingInspection: 0, activeLoans: 0, overdueLoans: 0 };
   }
 
-  const resourceIds = ownedResources.map((r: { id: string }) => r.id);
   const nowIso = new Date().toISOString();
 
   const [
@@ -402,6 +427,67 @@ export async function getCustodianActionCounts(userId: string): Promise<{
     activeLoans: activeCount || 0,
     overdueLoans: overdueCount || 0,
   };
+}
+
+/**
+ * Retrieves outgoing reservation requests submitted by a borrower that are awaiting custodian review.
+ */
+export async function getUserPendingBorrowerBookings(
+  userId: string
+): Promise<BookingWithRelations[]> {
+  const supabase = await createClient();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase.from("bookings") as any)
+    .select(
+      `
+      *,
+      resource:resources (
+        *,
+        institution:institutions (*),
+        owner:profiles (
+          id,
+          full_name,
+          avatar_url,
+          role,
+          verification_status
+        )
+      ),
+      borrower:profiles!borrower_id (
+        id,
+        full_name,
+        avatar_url,
+        role,
+        verification_status
+      ),
+      decision_reviewer:profiles!decision_by (
+        id,
+        full_name
+      ),
+      eligibility_checks (*),
+      condition_reports (*),
+      incidents (*)
+    `
+    )
+    .eq("borrower_id", userId)
+    .in("status", ["requested", "waitlisted"])
+    .order("created_at", { ascending: false });
+
+  if (error || !data) return [];
+  return (data as BookingWithRelations[]).map(computeOverdueMetadata);
+}
+
+/**
+ * Count of outgoing reservation requests submitted by a user awaiting custodian clearance.
+ */
+export async function getBorrowerPendingCount(userId: string): Promise<number> {
+  const supabase = await createClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { count } = await (supabase.from("bookings") as any)
+    .select("id", { count: "exact", head: true })
+    .eq("borrower_id", userId)
+    .in("status", ["requested", "waitlisted"]);
+  return count || 0;
 }
 
 /**
