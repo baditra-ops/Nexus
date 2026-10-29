@@ -4,8 +4,9 @@ from core.config import settings
 router = APIRouter(tags=["Health"])
 
 
-@router.get(
+@router.api_route(
     "/health",
+    methods=["GET", "HEAD"],
     summary="Service Health Check",
     description="Returns the operational status, version, and component readiness of the Nexus AI/ML service.",
 )

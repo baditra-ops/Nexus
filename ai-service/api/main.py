@@ -47,7 +47,7 @@ app.include_router(utilization.router)
 app.include_router(forecasting.router)
 
 
-@app.get("/", tags=["Root"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["Root"])
 async def root():
     return {
         "service": settings.service_name,

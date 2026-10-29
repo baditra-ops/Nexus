@@ -7,8 +7,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8000
+    PYTHONDONTWRITEBYTECODE=1
 
 # Install system dependencies if required for scikit-learn / numpy
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -27,9 +26,7 @@ COPY . .
 RUN adduser --disabled-password --gecos "" appuser && chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 8000
+EXPOSE 8000 10000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://127.0.0.1:8000/health || exit 1
-
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Dynamically bind to the PORT injected by cloud hosts (Render defaults to 10000, local defaults to 8000)
+CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
