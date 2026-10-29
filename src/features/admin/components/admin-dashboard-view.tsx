@@ -18,7 +18,9 @@ import {
   Search,
   ExternalLink,
   History,
+  Sparkles,
 } from "lucide-react";
+import { AIUtilizationDashboard } from "@/features/ai/components/ai-utilization-dashboard";
 import type {
   MemberWithDetails,
   InstitutionMetrics,
@@ -49,7 +51,7 @@ export function AdminDashboardView({
   initialIncidents,
   initialLogs,
 }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = React.useState<"members" | "loans" | "incidents" | "audit">("members");
+  const [activeTab, setActiveTab] = React.useState<"members" | "loans" | "incidents" | "audit" | "ai_insights">("members");
   const [memberFilter, setMemberFilter] = React.useState<string>("all");
   const [memberSearch, setMemberSearch] = React.useState<string>("");
 
@@ -280,6 +282,19 @@ export function AdminDashboardView({
             }`}
           >
             Institutional Audit Ledger
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("ai_insights")}
+            className={`flex items-center gap-1.5 border-b-2 py-3 text-xs font-semibold transition-colors ${
+              activeTab === "ai_insights"
+                ? "border-teal-600 text-teal-600 dark:border-teal-400 dark:text-teal-400"
+                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400"
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5 text-teal-500" />
+            <span>AI Insights & Utilization</span>
           </button>
         </nav>
       </div>
@@ -740,6 +755,11 @@ export function AdminDashboardView({
             </div>
           )}
         </div>
+      )}
+
+      {/* TAB 5: AI UTILIZATION & DEMAND FORECASTING */}
+      {activeTab === "ai_insights" && (
+        <AIUtilizationDashboard institutionName={institutionName} />
       )}
 
       {/* Dialog Modals */}

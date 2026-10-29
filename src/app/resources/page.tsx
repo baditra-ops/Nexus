@@ -14,6 +14,7 @@ import {
 } from "@/features/resources/services/resource-service";
 import type { ResourceSortOption, DbResourceType } from "@/features/resources/types";
 import { Compass, PlusCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { AIRecommendationPanel } from "@/features/ai/components/ai-recommendation-panel";
 
 interface ResourcesPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -76,8 +77,9 @@ async function ResourcesDirectoryContent({ searchParams }: ResourcesPageProps) {
         }
         actions={
           <div className="flex items-center gap-2">
+            <AIRecommendationPanel />
             <Link href="/my-resources/new">
-              <Button variant="teal" size="sm">
+              <Button variant="outline" size="sm">
                 <PlusCircle className="h-4 w-4" />
                 <span>List a Resource</span>
               </Button>
