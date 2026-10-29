@@ -61,34 +61,54 @@ export function BookingCard({ booking }: BookingCardProps) {
   const getStatusBadge = () => {
     if (booking.is_overdue) {
       return (
-        <Badge variant="danger" className="text-xs">
-          Overdue by {booking.overdue_duration_text}
-        </Badge>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-rose-500/10 text-rose-700 border border-rose-500/30 dark:bg-rose-950/40 dark:text-rose-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+          Overdue ({booking.overdue_duration_text})
+        </span>
       );
     }
     switch (booking.status) {
       case "approved":
-        return <Badge variant="teal">Approved — Ready for Handover</Badge>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-teal-500/10 text-teal-700 border border-teal-500/30 dark:bg-teal-950/40 dark:text-teal-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
+            Approved &bull; Ready for Handover
+          </span>
+        );
+      case "checked_out":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-teal-500/10 text-teal-700 border border-teal-500/30 dark:bg-teal-950/40 dark:text-teal-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
+            In Borrower Custody
+          </span>
+        );
       case "waitlisted":
         return (
-          <Badge variant="navy">
+          <Badge variant="navy" className="text-2xs font-bold">
             Waitlisted {booking.waitlist_position ? `#${booking.waitlist_position}` : ""}
           </Badge>
         );
       case "requested":
-        return <Badge variant="warning">Awaiting Custodian Review</Badge>;
-      case "checked_out":
-        return <Badge variant="teal">In Custody</Badge>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-700 border border-amber-500/30 dark:bg-amber-950/40 dark:text-amber-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+            Awaiting Custodian Review
+          </span>
+        );
       case "returned":
-        return <Badge variant="warning">Returned — Inspection Pending</Badge>;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-700 border border-amber-500/30 dark:bg-amber-950/40 dark:text-amber-300">
+            Returned &bull; Inspection Pending
+          </span>
+        );
       case "rejected":
-        return <Badge variant="danger">Declined</Badge>;
+        return <Badge variant="danger" className="text-2xs">Declined</Badge>;
       case "cancelled":
-        return <Badge variant="neutral">Cancelled</Badge>;
+        return <Badge variant="neutral" className="text-2xs">Cancelled</Badge>;
       case "completed":
-        return <Badge variant="success">Completed</Badge>;
+        return <Badge variant="success" className="text-2xs">Completed</Badge>;
       default:
-        return <Badge variant="neutral">{booking.status}</Badge>;
+        return <Badge variant="neutral" className="text-2xs">{booking.status}</Badge>;
     }
   };
 
@@ -96,10 +116,10 @@ export function BookingCard({ booking }: BookingCardProps) {
   const primaryImage = images.length > 0 ? images[0] : null;
 
   return (
-    <Card className="overflow-hidden border-slate-200 shadow-xs dark:border-slate-800">
+    <Card className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white/70 shadow-xs backdrop-blur-xs hover:shadow-md hover:border-slate-300 transition-all dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-slate-700">
       <div className="flex flex-col sm:flex-row">
         {/* Media Thumbnail */}
-        <div className="relative h-36 w-full sm:h-auto sm:w-48 bg-slate-100 dark:bg-slate-800 shrink-0">
+        <div className="relative h-40 w-full sm:h-auto sm:w-52 bg-slate-950 shrink-0 overflow-hidden">
           {primaryImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -108,13 +128,14 @@ export function BookingCard({ booking }: BookingCardProps) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center text-slate-400">
-              <Layers className="h-8 w-8 stroke-[1.5]" />
-              <span className="text-[10px] font-medium uppercase mt-1">
-                {resource?.category || "Equipment"}
+            <div className="flex h-full w-full flex-col items-center justify-center text-slate-500 bg-slate-900">
+              <Layers className="h-8 w-8 stroke-[1.25] text-slate-600" />
+              <span className="text-[10px] font-mono uppercase mt-1 tracking-wider text-slate-500">
+                {resource?.category || "Apparatus"}
               </span>
             </div>
           )}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-slate-950/30" />
         </div>
 
         {/* Content Body */}
@@ -122,20 +143,20 @@ export function BookingCard({ booking }: BookingCardProps) {
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                <span className="text-2xs font-bold uppercase tracking-wider text-slate-400 font-mono">
                   {resource?.resource_type || "Equipment"}
                 </span>
                 <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-                <span className="text-xs text-slate-500">{resource?.category}</span>
+                <span className="text-2xs font-semibold text-slate-500">{resource?.category}</span>
               </div>
               {getStatusBadge()}
             </div>
 
             <CardHeader className="p-0 pt-2 pb-2">
-              <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <CardTitle className="text-base font-bold text-slate-900 dark:text-white">
                 <Link
                   href={`/resources/${booking.resource_id}`}
-                  className="hover:text-teal-700 dark:hover:text-teal-400"
+                  className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                 >
                   {resource?.title || "Unnamed Apparatus"}
                 </Link>
@@ -158,22 +179,22 @@ export function BookingCard({ booking }: BookingCardProps) {
 
             <CardContent className="p-0 pt-2 space-y-3">
               {/* Time Window */}
-              <div className="flex flex-col gap-1 rounded-lg bg-slate-50 p-2.5 text-xs text-slate-700 dark:bg-slate-950 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 p-3 text-xs text-slate-700 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between border border-slate-200/50 dark:border-slate-800/50">
                 <div className="flex items-center gap-1.5 font-medium">
                   <Calendar className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                  <span>Start: {formatDate(booking.start_time)}</span>
+                  <span>Start: <strong className="text-slate-900 dark:text-white">{formatDate(booking.start_time)}</strong></span>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <Clock className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                  <span>End: {formatDate(booking.end_time)}</span>
+                  <span>End: <strong className="text-slate-900 dark:text-white">{formatDate(booking.end_time)}</strong></span>
                 </div>
               </div>
 
               {/* Request Purpose Note */}
               {booking.request_notes && (
-                <div className="text-xs text-slate-600 dark:text-slate-400">
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
-                    Project Purpose:{" "}
+                <div className="text-xs text-slate-600 dark:text-slate-400 bg-white/50 dark:bg-slate-900/40 p-2.5 rounded-lg border border-slate-200/40 dark:border-slate-800/40">
+                  <span className="font-bold text-slate-700 dark:text-slate-300">
+                    Project Scope:{" "}
                   </span>
                   <span>{booking.request_notes}</span>
                 </div>
@@ -181,10 +202,10 @@ export function BookingCard({ booking }: BookingCardProps) {
 
               {/* Rejection / Custodian Notes */}
               {booking.decision_notes && (
-                <div className="rounded-lg border border-slate-200 bg-slate-50/70 p-2.5 text-xs dark:border-slate-800 dark:bg-slate-900/60">
-                  <div className="flex items-center gap-1.5 font-semibold text-slate-800 dark:text-slate-200">
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-slate-900/60">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-800 dark:text-slate-200">
                     <Info className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                    <span>Custodian Decision Note:</span>
+                    <span>Custodian Review Note:</span>
                   </div>
                   <p className="mt-1 text-slate-600 dark:text-slate-400">
                     {booking.decision_notes}
@@ -195,23 +216,23 @@ export function BookingCard({ booking }: BookingCardProps) {
               {/* Eligibility Check Checklist */}
               {booking.eligibility_checks && booking.eligibility_checks.length > 0 && (
                 <div className="space-y-1.5 pt-1">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                     Clearance Verifications
                   </span>
                   <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
                     {booking.eligibility_checks.map((check) => (
                       <div
                         key={check.id}
-                        className="flex items-center gap-2 text-xs rounded border border-slate-100 bg-white px-2 py-1 dark:border-slate-800 dark:bg-slate-900"
+                        className="flex items-center gap-2 text-xs rounded-lg border border-slate-200/60 bg-white px-2.5 py-1.5 dark:border-slate-800 dark:bg-slate-950"
                       >
                         {check.status === "passed" ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-teal-600 shrink-0" />
                         ) : check.status === "failed" ? (
-                          <XCircle className="h-3.5 w-3.5 text-red-600 shrink-0" />
+                          <XCircle className="h-3.5 w-3.5 text-rose-600 shrink-0" />
                         ) : (
                           <AlertCircle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                         )}
-                        <span className="truncate text-slate-700 dark:text-slate-300">
+                        <span className="truncate text-slate-700 dark:text-slate-300 text-2xs font-medium">
                           {check.requirement}
                         </span>
                       </div>
@@ -221,7 +242,7 @@ export function BookingCard({ booking }: BookingCardProps) {
               )}
 
               {errorMsg && (
-                <div className="text-xs text-red-600 dark:text-red-400 font-medium">
+                <div className="text-xs text-rose-600 dark:text-rose-400 font-semibold">
                   {errorMsg}
                 </div>
               )}
@@ -229,25 +250,25 @@ export function BookingCard({ booking }: BookingCardProps) {
           </div>
 
           <CardFooter className="p-0 pt-4 flex items-center justify-between border-t border-slate-100 mt-4 dark:border-slate-800">
-            <span className="text-[11px] text-slate-400">
+            <span className="text-[11px] font-mono text-slate-400">
               Requested {new Date(booking.created_at).toLocaleDateString()}
             </span>
 
             <div className="flex items-center gap-2">
               <Link href={`/bookings/${booking.id}`}>
-                <Button variant="teal" size="sm">
+                <Button variant="teal" size="sm" className="shadow-2xs">
                   <span>
                     {booking.status === "approved"
-                      ? "Checkout"
+                      ? "Checkout Handover"
                       : booking.status === "checked_out"
-                      ? "Return"
-                      : "View Details"}
+                      ? "Initiate Return"
+                      : "View Dossier"}
                   </span>
                 </Button>
               </Link>
 
               <Link href={`/resources/${booking.resource_id}`}>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="text-xs">
                   <span>Apparatus</span>
                 </Button>
               </Link>
@@ -258,7 +279,7 @@ export function BookingCard({ booking }: BookingCardProps) {
                   size="sm"
                   disabled={isPending}
                   onClick={handleCancel}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                  className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/50 dark:hover:bg-rose-950/30"
                 >
                   <span>Cancel</span>
                 </Button>

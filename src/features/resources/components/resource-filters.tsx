@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RESOURCE_CATEGORIES, RESOURCE_TYPES, type DbInstitution } from "../types";
-import { Search, RotateCcw, SlidersHorizontal } from "lucide-react";
+import { Search, RotateCcw, SlidersHorizontal, Sparkles } from "lucide-react";
 
 interface ResourceFiltersProps {
   institutions: DbInstitution[];
@@ -62,56 +62,76 @@ export function ResourceFilters({ institutions }: ResourceFiltersProps) {
   );
 
   return (
-    <div className="space-y-4 rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
-      {/* Search Bar */}
-      <form onSubmit={handleSearchSubmit} className="flex gap-2">
+    <div className="space-y-4 rounded-2xl border border-slate-200/90 bg-white/95 p-5 shadow-sm dark:border-slate-800/90 dark:bg-slate-900/90 backdrop-blur-md">
+      {/* Search Bar with glowing focus and submit button */}
+      <form onSubmit={handleSearchSubmit} className="flex gap-2.5">
         <div className="flex-1">
           <Input
             id="search-resources"
             type="text"
-            placeholder="Search instruments by name, specs, or capabilities..."
+            placeholder="Search precision apparatus by keyword, technical specification, or lab..."
             value={queryInput}
             onChange={(e) => setQueryInput(e.target.value)}
             startIcon={<Search className="h-4 w-4 text-slate-400" />}
+            className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 focus:ring-cyan-500"
           />
         </div>
-        <Button type="submit" variant="teal" size="md">
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          className="rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 text-white font-semibold shadow-sm px-5"
+        >
+          <Search className="h-4 w-4 mr-1 text-cyan-400" />
           <span>Search</span>
         </Button>
       </form>
 
-      {/* Filter Selectors */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 pt-1">
-        {/* Category */}
-        <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-            Category
-          </label>
-          <select
-            value={currentCategory}
-            onChange={(e) => applyFilters({ category: e.target.value })}
-            className="h-9 w-full rounded-lg border border-slate-300 bg-white px-2.5 text-xs text-slate-900 focus:border-teal-600 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
-          >
-            <option value="All">All Categories</option>
-            {RESOURCE_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Category Pills (Aceternity / Watermelon UI style) */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
+        <button
+          type="button"
+          onClick={() => applyFilters({ category: "All" })}
+          className={`px-3 py-1.5 rounded-full text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+            currentCategory === "All"
+              ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-xs shadow-cyan-500/20"
+              : "bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+          }`}
+        >
+          All Categories
+        </button>
+        {RESOURCE_CATEGORIES.map((cat) => {
+          const isSelected = currentCategory === cat;
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => applyFilters({ category: isSelected ? "All" : cat })}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+                isSelected
+                  ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-xs shadow-cyan-500/20"
+                  : "bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+              }`}
+            >
+              {cat}
+            </button>
+          );
+        })}
+      </div>
 
+      {/* Filter Selectors */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 pt-1 border-t border-slate-100 dark:border-slate-800/80">
         {/* Resource Type */}
         <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-            Asset Type
+          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
+            Asset Class
           </label>
           <select
             value={currentType}
             onChange={(e) => applyFilters({ resourceType: e.target.value })}
-            className="h-9 w-full rounded-lg border border-slate-300 bg-white px-2.5 text-xs text-slate-900 focus:border-teal-600 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+            className="h-9 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs text-slate-900 focus:border-cyan-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-100"
           >
-            <option value="all">All Asset Types</option>
+            <option value="all">All Asset Classes</option>
             {RESOURCE_TYPES.map((t) => (
               <option key={t.value} value={t.value}>
                 {t.label}
@@ -122,15 +142,15 @@ export function ResourceFilters({ institutions }: ResourceFiltersProps) {
 
         {/* Institution */}
         <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
             Institution
           </label>
           <select
             value={currentInstitution}
             onChange={(e) => applyFilters({ institutionId: e.target.value })}
-            className="h-9 w-full rounded-lg border border-slate-300 bg-white px-2.5 text-xs text-slate-900 focus:border-teal-600 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+            className="h-9 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs text-slate-900 focus:border-cyan-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-100"
           >
-            <option value="all">All Institutions</option>
+            <option value="all">All Consortium Nodes</option>
             {institutions.map((inst) => (
               <option key={inst.id} value={inst.id}>
                 {inst.name}
@@ -141,13 +161,13 @@ export function ResourceFilters({ institutions }: ResourceFiltersProps) {
 
         {/* Sorting */}
         <div className="space-y-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
             Sort Order
           </label>
           <select
             value={currentSort}
             onChange={(e) => applyFilters({ sort: e.target.value })}
-            className="h-9 w-full rounded-lg border border-slate-300 bg-white px-2.5 text-xs text-slate-900 focus:border-teal-600 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+            className="h-9 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs text-slate-900 focus:border-cyan-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-100"
           >
             <option value="newest">Recently Listed</option>
             <option value="title_asc">Alphabetical (A - Z)</option>
@@ -161,17 +181,17 @@ export function ResourceFilters({ institutions }: ResourceFiltersProps) {
       {hasActiveFilters && (
         <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500 dark:border-slate-800">
           <div className="flex items-center gap-1.5">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-teal-600" />
-            <span>Active filters applied</span>
+            <SlidersHorizontal className="h-3.5 w-3.5 text-cyan-600" />
+            <span className="font-medium text-slate-700 dark:text-slate-300">Filtered view active</span>
           </div>
 
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-1 font-semibold text-teal-700 hover:text-teal-800 dark:text-teal-400 cursor-pointer"
+            className="inline-flex items-center gap-1 font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-400 dark:hover:text-cyan-300 cursor-pointer"
           >
             <RotateCcw className="h-3 w-3" />
-            <span>Reset All</span>
+            <span>Clear Filters</span>
           </button>
         </div>
       )}

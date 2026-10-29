@@ -102,16 +102,16 @@ export function AdminDashboardView({
 
       {/* Real Governance Metrics Cards */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <Card className="border-slate-200 shadow-2xs dark:border-slate-800">
-          <CardContent className="p-3.5">
+        <Card className="rounded-2xl border-slate-200/80 bg-white/60 shadow-xs backdrop-blur-xs dark:border-slate-800/80 dark:bg-slate-900/60 hover:border-slate-300 transition-colors">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-medium">Total Members</span>
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">Total Members</span>
               <Users className="h-4 w-4 text-slate-400" />
             </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <p className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
               {metrics.totalMembers}
             </p>
-            <p className="mt-0.5 text-[10px] text-slate-400">Institutional network</p>
+            <p className="mt-0.5 text-2xs text-slate-400">Institutional network</p>
           </CardContent>
         </Card>
 
@@ -120,84 +120,84 @@ export function AdminDashboardView({
             setActiveTab("members");
             setMemberFilter("pending");
           }}
-          className={`border-slate-200 shadow-2xs cursor-pointer transition-all hover:border-amber-400 dark:border-slate-800 ${
+          className={`rounded-2xl border-slate-200/80 bg-white/60 shadow-xs backdrop-blur-xs cursor-pointer transition-all hover:border-amber-400 dark:border-slate-800/80 dark:bg-slate-900/60 ${
             metrics.pendingVerifications > 0
-              ? "border-amber-300 bg-amber-50/30 dark:bg-amber-950/20"
+              ? "border-amber-400/60 bg-amber-50/40 dark:bg-amber-950/20"
               : ""
           }`}
         >
-          <CardContent className="p-3.5">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-medium">Pending Verif.</span>
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">Pending Verif.</span>
               <ShieldAlert
                 className={`h-4 w-4 ${
-                  metrics.pendingVerifications > 0 ? "text-amber-600" : "text-slate-400"
+                  metrics.pendingVerifications > 0 ? "text-amber-500" : "text-slate-400"
                 }`}
               />
             </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-amber-700 dark:text-amber-400">
+            <p className="mt-2 text-2xl font-black tracking-tight text-amber-600 dark:text-amber-400">
               {metrics.pendingVerifications}
             </p>
-            <p className="mt-0.5 text-[10px] text-amber-600/80">Awaiting clearance</p>
+            <p className="mt-0.5 text-2xs text-amber-600/80 font-medium">Awaiting clearance</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-2xs dark:border-slate-800">
-          <CardContent className="p-3.5">
+        <Card className="rounded-2xl border-slate-200/80 bg-white/60 shadow-xs backdrop-blur-xs dark:border-slate-800/80 dark:bg-slate-900/60 hover:border-teal-400 transition-colors">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-medium">Active Loans</span>
-              <Boxes className="h-4 w-4 text-teal-600" />
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">Active Loans</span>
+              <Boxes className="h-4 w-4 text-teal-500" />
             </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <p className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
               {metrics.activeLoans}
             </p>
-            <p className="mt-0.5 text-[10px] text-teal-600 dark:text-teal-400">In borrower custody</p>
+            <p className="mt-0.5 text-2xs text-teal-600 dark:text-teal-400 font-medium">In borrower custody</p>
           </CardContent>
         </Card>
 
         <Card
           onClick={() => setActiveTab("loans")}
-          className={`border-slate-200 shadow-2xs cursor-pointer transition-all hover:border-rose-400 dark:border-slate-800 ${
-            metrics.overdueLoans > 0 ? "border-rose-300 bg-rose-50/40 dark:bg-rose-950/20" : ""
+          className={`rounded-2xl border-slate-200/80 bg-white/60 shadow-xs backdrop-blur-xs cursor-pointer transition-all hover:border-rose-400 dark:border-slate-800/80 dark:bg-slate-900/60 ${
+            metrics.overdueLoans > 0 ? "border-rose-400/60 bg-rose-50/40 dark:bg-rose-950/20" : ""
           }`}
         >
-          <CardContent className="p-3.5">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-medium">Overdue Returns</span>
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">Overdue Returns</span>
               <Clock
                 className={`h-4 w-4 ${
-                  metrics.overdueLoans > 0 ? "text-rose-600" : "text-slate-400"
+                  metrics.overdueLoans > 0 ? "text-rose-500" : "text-slate-400"
                 }`}
               />
             </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-rose-700 dark:text-rose-400">
+            <p className="mt-2 text-2xl font-black tracking-tight text-rose-600 dark:text-rose-400">
               {metrics.overdueLoans}
             </p>
-            <p className="mt-0.5 text-[10px] text-rose-600/80">Deadline passed</p>
+            <p className="mt-0.5 text-2xs text-rose-600/80 font-medium">Deadline passed</p>
           </CardContent>
         </Card>
 
         <Card
           onClick={() => setActiveTab("incidents")}
-          className={`border-slate-200 shadow-2xs cursor-pointer transition-all hover:border-amber-400 dark:border-slate-800 ${
+          className={`rounded-2xl border-slate-200/80 bg-white/60 shadow-xs backdrop-blur-xs cursor-pointer transition-all hover:border-amber-400 dark:border-slate-800/80 dark:bg-slate-900/60 ${
             metrics.unresolvedIncidents > 0
-              ? "border-amber-300 bg-amber-50/30 dark:bg-amber-950/20"
+              ? "border-amber-400/60 bg-amber-50/40 dark:bg-amber-950/20"
               : ""
           }`}
         >
-          <CardContent className="p-3.5">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-medium">Safety Incidents</span>
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">Safety Incidents</span>
               <AlertTriangle
                 className={`h-4 w-4 ${
-                  metrics.unresolvedIncidents > 0 ? "text-amber-600" : "text-slate-400"
+                  metrics.unresolvedIncidents > 0 ? "text-amber-500" : "text-slate-400"
                 }`}
               />
             </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <p className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
               {metrics.unresolvedIncidents}
             </p>
-            <p className="mt-0.5 text-[10px] text-slate-400">Under review</p>
+            <p className="mt-0.5 text-2xs text-slate-400">Under review</p>
           </CardContent>
         </Card>
 
@@ -206,97 +206,95 @@ export function AdminDashboardView({
             setActiveTab("members");
             setMemberFilter("suspended");
           }}
-          className={`border-slate-200 shadow-2xs cursor-pointer transition-all hover:border-rose-400 dark:border-slate-800 ${
-            metrics.suspendedMembers > 0 ? "border-rose-300 bg-rose-50/20" : ""
+          className={`rounded-2xl border-slate-200/80 bg-white/60 shadow-xs backdrop-blur-xs cursor-pointer transition-all hover:border-rose-400 dark:border-slate-800/80 dark:bg-slate-900/60 ${
+            metrics.suspendedMembers > 0 ? "border-rose-400/60 bg-rose-50/40 dark:bg-rose-950/20" : ""
           }`}
         >
-          <CardContent className="p-3.5">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-medium">Suspended</span>
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">Suspended</span>
               <ShieldAlert className="h-4 w-4 text-slate-400" />
             </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <p className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
               {metrics.suspendedMembers}
             </p>
-            <p className="mt-0.5 text-[10px] text-slate-400">Access holds</p>
+            <p className="mt-0.5 text-2xs text-slate-400">Access holds</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Navigation Tabs */}
-      <div className="border-b border-slate-200 dark:border-slate-800">
-        <nav className="flex space-x-6">
-          <button
-            type="button"
-            onClick={() => setActiveTab("members")}
-            className={`border-b-2 py-3 text-xs font-semibold transition-colors ${
-              activeTab === "members"
-                ? "border-teal-600 text-teal-600 dark:border-teal-400 dark:text-teal-400"
-                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400"
-            }`}
-          >
-            Institutional Members & Verifications ({initialMembers.length})
-          </button>
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+        <button
+          type="button"
+          onClick={() => setActiveTab("members")}
+          className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+            activeTab === "members"
+              ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
+              : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
+          }`}
+        >
+          Members & Verifications ({initialMembers.length})
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("loans")}
-            className={`flex items-center gap-1.5 border-b-2 py-3 text-xs font-semibold transition-colors ${
-              activeTab === "loans"
-                ? "border-teal-600 text-teal-600 dark:border-teal-400 dark:text-teal-400"
-                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400"
-            }`}
-          >
-            <span>Apparatus Loans ({initialLoans.length})</span>
-            {metrics.overdueLoans > 0 && (
-              <Badge variant="danger" className="h-4 px-1 text-[10px]">
-                {metrics.overdueLoans} overdue
-              </Badge>
-            )}
-          </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("loans")}
+          className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+            activeTab === "loans"
+              ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
+              : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
+          }`}
+        >
+          <span>Apparatus Loans ({initialLoans.length})</span>
+          {metrics.overdueLoans > 0 && (
+            <Badge variant="danger" className="h-4 px-1.5 text-[10px]">
+              {metrics.overdueLoans} overdue
+            </Badge>
+          )}
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("incidents")}
-            className={`flex items-center gap-1.5 border-b-2 py-3 text-xs font-semibold transition-colors ${
-              activeTab === "incidents"
-                ? "border-teal-600 text-teal-600 dark:border-teal-400 dark:text-teal-400"
-                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400"
-            }`}
-          >
-            <span>Safety & Incident Log ({initialIncidents.length})</span>
-            {metrics.unresolvedIncidents > 0 && (
-              <Badge variant="warning" className="h-4 px-1 text-[10px]">
-                {metrics.unresolvedIncidents}
-              </Badge>
-            )}
-          </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("incidents")}
+          className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+            activeTab === "incidents"
+              ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
+              : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
+          }`}
+        >
+          <span>Safety & Incidents ({initialIncidents.length})</span>
+          {metrics.unresolvedIncidents > 0 && (
+            <Badge variant="warning" className="h-4 px-1.5 text-[10px]">
+              {metrics.unresolvedIncidents}
+            </Badge>
+          )}
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("audit")}
-            className={`border-b-2 py-3 text-xs font-semibold transition-colors ${
-              activeTab === "audit"
-                ? "border-teal-600 text-teal-600 dark:border-teal-400 dark:text-teal-400"
-                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400"
-            }`}
-          >
-            Institutional Audit Ledger
-          </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("audit")}
+          className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+            activeTab === "audit"
+              ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
+              : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
+          }`}
+        >
+          Audit Ledger
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("ai_insights")}
-            className={`flex items-center gap-1.5 border-b-2 py-3 text-xs font-semibold transition-colors ${
-              activeTab === "ai_insights"
-                ? "border-teal-600 text-teal-600 dark:border-teal-400 dark:text-teal-400"
-                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400"
-            }`}
-          >
-            <Sparkles className="h-3.5 w-3.5 text-teal-500" />
-            <span>AI Insights & Utilization</span>
-          </button>
-        </nav>
+        <button
+          type="button"
+          onClick={() => setActiveTab("ai_insights")}
+          className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+            activeTab === "ai_insights"
+              ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
+              : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
+          }`}
+        >
+          <Sparkles className="h-3.5 w-3.5 text-teal-400" />
+          <span>AI Insights & Capacity</span>
+        </button>
       </div>
 
       {/* TAB 1: MEMBERS & VERIFICATION */}

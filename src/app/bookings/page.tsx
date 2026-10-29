@@ -52,7 +52,7 @@ async function MyBookingsContent({ searchParams }: MyBookingsPageProps) {
   return (
     <div className="space-y-6">
       {/* Status Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-200 pb-3 dark:border-slate-800">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
         {filterTabs.map((tab) => {
           const isActive = statusFilter === tab.value;
           const Icon = tab.icon;
@@ -60,10 +60,10 @@ async function MyBookingsContent({ searchParams }: MyBookingsPageProps) {
             <Link
               key={tab.value}
               href={`/bookings${tab.value === "all" ? "" : `?status=${tab.value}`}`}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
                 isActive
-                  ? "bg-teal-600 text-white shadow-xs dark:bg-teal-700"
-                  : "text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                  ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />

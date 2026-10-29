@@ -77,33 +77,33 @@ export function BookingRequestForm({
 
   if (!currentUserId) {
     return (
-      <Card className="shadow-md border-slate-200 dark:border-slate-800">
+      <Card className="rounded-2xl border border-slate-200/90 bg-white/80 p-1 shadow-md backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/80">
         <CardHeader className="p-5 pb-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
               Security Deposit
             </span>
-            <Badge variant={resource.deposit_amount > 0 ? "teal" : "neutral"}>
-              {resource.deposit_amount > 0 ? "Refundable" : "No Deposit"}
+            <Badge variant={resource.deposit_amount > 0 ? "teal" : "neutral"} className="text-2xs font-bold">
+              {resource.deposit_amount > 0 ? "Refundable" : "No Deposit Required"}
             </Badge>
           </div>
-          <div className="mt-2 flex items-baseline gap-1">
-            <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">
+          <div className="mt-2 flex items-baseline gap-1.5">
+            <span className="text-3xl font-black text-slate-900 dark:text-white">
               ${Number(resource.deposit_amount).toFixed(2)}
             </span>
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-xs font-bold text-slate-400 font-mono">
               {resource.currency || "USD"}
             </span>
           </div>
         </CardHeader>
         <CardContent className="p-5 pt-2 space-y-4">
-          <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-600 dark:bg-slate-900 dark:text-slate-400">
-            Sign in with your verified institutional account to check real-time availability and request reservation slots.
+          <div className="rounded-xl bg-slate-50 p-3 text-xs text-slate-600 dark:bg-slate-950 dark:text-slate-400 border border-slate-200/50 dark:border-slate-800/50">
+            Sign in with your verified institutional credentials to check real-time availability and request reservation slots.
           </div>
           <Link href={`/auth/sign-in?redirectTo=/resources/${resource.id}`} className="block">
-            <Button variant="teal" size="lg" className="w-full justify-center">
+            <Button variant="teal" size="lg" className="w-full justify-center shadow-xs">
               <User className="h-4 w-4 mr-1.5" />
-              <span>Sign in to Request Booking</span>
+              <span>Sign In to Request Booking</span>
             </Button>
           </Link>
         </CardContent>
@@ -113,18 +113,18 @@ export function BookingRequestForm({
 
   if (isOwner) {
     return (
-      <Card className="shadow-md border-teal-200 bg-teal-50/40 dark:border-teal-900/40 dark:bg-teal-950/20">
+      <Card className="rounded-2xl border border-teal-500/30 bg-teal-50/30 p-1 shadow-md backdrop-blur-xs dark:border-teal-900/40 dark:bg-teal-950/20">
         <CardHeader className="p-5 pb-3">
-          <Badge variant="teal" className="w-fit">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-2xs font-bold bg-teal-500/10 text-teal-700 border border-teal-500/30 dark:text-teal-300 w-fit">
             Custodian Profile
-          </Badge>
+          </span>
           <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100 mt-2">
             You Manage This Apparatus
           </CardTitle>
         </CardHeader>
         <CardContent className="p-5 pt-1 space-y-3 text-xs text-slate-600 dark:text-slate-400">
-          <p>
-            As the designated custodian for this resource, you cannot book it yourself. Incoming booking requests from researchers will appear in your approval queue.
+          <p className="leading-relaxed">
+            As the designated custodian for this resource, incoming booking requests from researchers will appear in your authorization queue.
           </p>
           <div className="pt-2 flex flex-col gap-2">
             <Link href="/approvals">
@@ -145,7 +145,7 @@ export function BookingRequestForm({
 
   if (!isPublished) {
     return (
-      <Card className="shadow-md border-amber-200 bg-amber-50/50 dark:border-amber-900/40 dark:bg-amber-950/20">
+      <Card className="rounded-2xl border border-amber-200 bg-amber-50/50 p-1 shadow-md dark:border-amber-900/40 dark:bg-amber-950/20">
         <CardHeader className="p-5">
           <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
             <Lock className="h-5 w-5 shrink-0" />
@@ -160,22 +160,22 @@ export function BookingRequestForm({
   }
 
   return (
-    <Card className="sticky top-6 shadow-md border-slate-200 dark:border-slate-800">
+    <Card className="sticky top-6 rounded-2xl border border-slate-200/90 bg-white/80 p-1 shadow-md backdrop-blur-xs dark:border-slate-800 dark:bg-slate-900/80">
       <CardHeader className="p-5 pb-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Reservation Request
           </span>
-          <Badge variant={resource.deposit_amount > 0 ? "teal" : "neutral"}>
+          <Badge variant={resource.deposit_amount > 0 ? "teal" : "neutral"} className="text-2xs font-bold">
             {resource.deposit_amount > 0 ? "Refundable Deposit" : "No Deposit"}
           </Badge>
         </div>
 
-        <div className="mt-2 flex items-baseline gap-1">
-          <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">
+        <div className="mt-2 flex items-baseline gap-1.5">
+          <span className="text-3xl font-black text-slate-900 dark:text-white">
             ${Number(resource.deposit_amount).toFixed(2)}
           </span>
-          <span className="text-xs font-semibold text-slate-500">
+          <span className="text-xs font-bold text-slate-400 font-mono">
             {resource.currency || "USD"}
           </span>
         </div>
@@ -187,8 +187,8 @@ export function BookingRequestForm({
 
           {/* Error Message */}
           {state?.error && (
-            <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-xs text-rose-800 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-300">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-600" />
               <span>{state.error}</span>
             </div>
           )}
@@ -198,7 +198,7 @@ export function BookingRequestForm({
             <div className="space-y-1">
               <label
                 htmlFor="booking-start-time"
-                className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300"
+                className="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-300"
               >
                 <Calendar className="h-3.5 w-3.5 text-teal-600" />
                 <span>Requested Start Date & Time</span>
@@ -210,14 +210,14 @@ export function BookingRequestForm({
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
                 required
-                className="h-9 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                className="h-10 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs text-slate-900 shadow-2xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
 
             <div className="space-y-1">
               <label
                 htmlFor="booking-end-time"
-                className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300"
+                className="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-300"
               >
                 <Clock className="h-3.5 w-3.5 text-teal-600" />
                 <span>Requested End Date & Time</span>
@@ -229,14 +229,14 @@ export function BookingRequestForm({
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 required
-                className="h-9 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                className="h-10 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs text-slate-900 shadow-2xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
 
             {durationText && (
-              <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 bg-slate-50 px-2.5 py-1.5 rounded dark:bg-slate-900">
+              <div className="flex items-center justify-between text-2xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 px-3 py-2 rounded-xl border border-slate-200/50 dark:border-slate-800/50">
                 <span>Calculated Duration:</span>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">
+                <span className="font-bold text-teal-700 dark:text-teal-400 font-mono">
                   {durationText}
                 </span>
               </div>
@@ -247,7 +247,7 @@ export function BookingRequestForm({
           <div className="space-y-1">
             <label
               htmlFor="booking-notes"
-              className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+              className="text-xs font-bold text-slate-700 dark:text-slate-300"
             >
               Intended Purpose & Project Scope
             </label>
@@ -255,19 +255,19 @@ export function BookingRequestForm({
               id="booking-notes"
               name="request_notes"
               rows={3}
-              placeholder="State your department, research topic, specific test protocol, or required accessories..."
-              className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+              placeholder="State your department, research topic, test protocol, or required accessories..."
+              className="w-full rounded-xl border border-slate-300 bg-white p-3 text-xs text-slate-900 placeholder:text-slate-400 shadow-2xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
             />
           </div>
 
           {/* Trust Guarantees */}
-          <div className="space-y-1.5 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-teal-600 shrink-0" />
+          <div className="space-y-2 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-teal-600 shrink-0" />
               <span>Eligibility check executed automatically</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-teal-600 shrink-0" />
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-teal-600 shrink-0" />
               <span>Auditable custody handoff on checkout</span>
             </div>
           </div>
@@ -277,7 +277,7 @@ export function BookingRequestForm({
             type="submit"
             variant="teal"
             size="lg"
-            className="w-full justify-center"
+            className="w-full justify-center shadow-xs"
             disabled={isPending}
           >
             {isPending ? (
@@ -287,7 +287,7 @@ export function BookingRequestForm({
             )}
           </Button>
 
-          <div className="flex items-start gap-1.5 text-[11px] text-slate-400">
+          <div className="flex items-start gap-1.5 text-[11px] text-slate-400 leading-relaxed">
             <Info className="h-3.5 w-3.5 shrink-0 mt-0.5 text-slate-400" />
             <span>
               Submitting a request does not complete checkout. The custodian reviews requirements and confirms schedule slot availability.
