@@ -52,7 +52,7 @@ async function MyBookingsContent({ searchParams }: MyBookingsPageProps) {
   return (
     <div className="space-y-6">
       {/* Status Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
         {filterTabs.map((tab) => {
           const isActive = statusFilter === tab.value;
           const Icon = tab.icon;
@@ -60,10 +60,10 @@ async function MyBookingsContent({ searchParams }: MyBookingsPageProps) {
             <Link
               key={tab.value}
               href={`/bookings${tab.value === "all" ? "" : `?status=${tab.value}`}`}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
                 isActive
-                  ? "bg-teal-600 text-white shadow-sm dark:bg-teal-700"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
+                  ? "bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                  : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -126,14 +126,22 @@ export default function MyBookingsPage({ searchParams }: MyBookingsPageProps) {
   return (
     <ContentContainer>
       <PageHeader
-        title="My Bookings & Reservations"
-        description="Monitor status of your equipment reservations, review eligibility clearance progress, and manage custody transfers."
-        badge={<Badge variant="teal">Reservation Hub</Badge>}
+        title="Reservations & Custody Logs"
+        description="Monitor status of your equipment reservations, review prerequisite clearance progress, and coordinate custody handovers."
+        breadcrumbs={[
+          { label: "Consortium", href: "/" },
+          { label: "My Reservations" },
+        ]}
+        badge={
+          <Badge variant="cyan" dot className="uppercase tracking-wider text-[11px]">
+            Reservation Hub
+          </Badge>
+        }
         actions={
           <Link href="/resources">
-            <Button variant="teal" size="sm">
+            <Button variant="cyan" size="sm">
               <Compass className="h-4 w-4" />
-              <span>Explore Equipment</span>
+              <span>Explore Apparatus</span>
             </Button>
           </Link>
         }

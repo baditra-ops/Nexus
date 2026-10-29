@@ -17,13 +17,21 @@ export default function ActivityHistoryPage() {
   return (
     <ContentContainer>
       <PageHeader
-        title="Activity & Audit History"
-        description="Immutable audit trail of equipment requests, custodian authorizations, checkouts, returns, incident reports, and institutional governance."
-        badge={<Badge variant="teal">Audited Ledger</Badge>}
+        title="Consortium Activity & Audit Ledger"
+        description="Tamper-evident operational ledger recording apparatus handovers, custodian clearances, return condition certifications, and institutional governance."
+        breadcrumbs={[
+          { label: "Consortium", href: "/" },
+          { label: "Audited Ledger" },
+        ]}
+        badge={
+          <Badge variant="violet" dot className="uppercase tracking-wider text-[11px]">
+            Cryptographic Ledger
+          </Badge>
+        }
         actions={
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-            <ShieldCheck className="h-4 w-4 text-teal-600" />
-            <span>Cryptographic Log Verification</span>
+          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-300">
+            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <span className="font-mono text-[11px]">Audit Engine Synchronized</span>
           </div>
         }
       />

@@ -70,43 +70,44 @@ export function BookingCard({ booking }: BookingCardProps) {
     switch (booking.status) {
       case "approved":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-teal-500/10 text-teal-700 border border-teal-500/30 dark:bg-teal-950/40 dark:text-teal-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
             Approved &bull; Ready for Handover
           </span>
         );
       case "checked_out":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-teal-500/10 text-teal-700 border border-teal-500/30 dark:bg-teal-950/40 dark:text-teal-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
-            In Borrower Custody
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            Active Loan &bull; In Custody
           </span>
         );
       case "waitlisted":
         return (
-          <Badge variant="navy" className="text-2xs font-bold">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-violet-500/10 text-violet-300 border border-violet-500/30 shadow-[0_0_12px_rgba(139,92,246,0.15)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
             Waitlisted {booking.waitlist_position ? `#${booking.waitlist_position}` : ""}
-          </Badge>
+          </span>
         );
       case "requested":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-700 border border-amber-500/30 dark:bg-amber-950/40 dark:text-amber-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.15)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
             Awaiting Custodian Review
           </span>
         );
       case "returned":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-700 border border-amber-500/30 dark:bg-amber-950/40 dark:text-amber-300">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
             Returned &bull; Inspection Pending
           </span>
         );
       case "rejected":
-        return <Badge variant="danger" className="text-2xs">Declined</Badge>;
+        return <Badge variant="danger" dot className="text-2xs font-bold">Declined</Badge>;
       case "cancelled":
-        return <Badge variant="neutral" className="text-2xs">Cancelled</Badge>;
+        return <Badge variant="neutral" className="text-2xs font-bold">Cancelled</Badge>;
       case "completed":
-        return <Badge variant="success" className="text-2xs">Completed</Badge>;
+        return <Badge variant="emerald" dot className="text-2xs font-bold">Completed Loan</Badge>;
       default:
         return <Badge variant="neutral" className="text-2xs">{booking.status}</Badge>;
     }

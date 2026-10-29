@@ -25,13 +25,21 @@ export default function NotificationsPage() {
   return (
     <ContentContainer>
       <PageHeader
-        title="Notifications & Alerts"
-        description="Persistent inbox of reservation clearances, handover confirmations, condition reviews, and institutional announcements."
-        badge={<Badge variant="teal">Alerts Inbox</Badge>}
+        title="Event Stream & Alerts"
+        description="Real-time operational stream of equipment clearance requests, custody handovers, return condition certifications, and consortium notices."
+        breadcrumbs={[
+          { label: "Consortium", href: "/" },
+          { label: "Event Stream" },
+        ]}
+        badge={
+          <Badge variant="cyan" dot className="uppercase tracking-wider text-[11px]">
+            Live Event Stream
+          </Badge>
+        }
         actions={
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-            <Bell className="h-4 w-4 text-teal-600" />
-            <span>Real-time Event Stream</span>
+          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-300">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-[11px]">Subscribed to WebSocket Feed</span>
           </div>
         }
       />

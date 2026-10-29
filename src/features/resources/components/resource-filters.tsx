@@ -87,30 +87,59 @@ export function ResourceFilters({ institutions }: ResourceFiltersProps) {
         </Button>
       </form>
 
-      {/* Category Pills (Aceternity / Watermelon UI style) */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
+      {/* Category Pills (Vibrant Multi-Hue Palette) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
         <button
           type="button"
           onClick={() => applyFilters({ category: "All" })}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer ${
             currentCategory === "All"
-              ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-xs shadow-cyan-500/20"
-              : "bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+              ? "bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white border border-slate-700 shadow-sm"
+              : "bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-700"
           }`}
         >
-          All Categories
+          ✨ All Categories
         </button>
         {RESOURCE_CATEGORIES.map((cat) => {
           const isSelected = currentCategory === cat;
+          const getPillStyle = () => {
+            switch (cat) {
+              case "Fabrication & CNC":
+                return isSelected
+                  ? "bg-gradient-to-r from-amber-600 to-amber-500 text-white shadow-xs shadow-amber-500/30"
+                  : "hover:text-amber-600 dark:hover:text-amber-400";
+              case "Electronics & Embedded Kits":
+                return isSelected
+                  ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-xs shadow-violet-500/30"
+                  : "hover:text-violet-600 dark:hover:text-violet-400";
+              case "Optics & Imaging":
+                return isSelected
+                  ? "bg-gradient-to-r from-cyan-600 to-sky-600 text-white shadow-xs shadow-cyan-500/30"
+                  : "hover:text-cyan-600 dark:hover:text-cyan-400";
+              case "Biochemical & Life Sciences":
+                return isSelected
+                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs shadow-emerald-500/30"
+                  : "hover:text-emerald-600 dark:hover:text-emerald-400";
+              case "Computing & Server Hardware":
+                return isSelected
+                  ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-xs shadow-rose-500/30"
+                  : "hover:text-rose-600 dark:hover:text-rose-400";
+              default:
+                return isSelected
+                  ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-xs shadow-indigo-500/30"
+                  : "hover:text-indigo-600 dark:hover:text-indigo-400";
+            }
+          };
+
           return (
             <button
               key={cat}
               type="button"
               onClick={() => applyFilters({ category: isSelected ? "All" : cat })}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer ${
                 isSelected
-                  ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-xs shadow-cyan-500/20"
-                  : "bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                  ? getPillStyle()
+                  : `bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/80 ${getPillStyle()}`
               }`}
             >
               {cat}

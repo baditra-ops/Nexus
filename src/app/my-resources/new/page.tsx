@@ -14,12 +14,21 @@ async function NewResourceContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Register New Shared Resource"
-        description="Publish scientific equipment, fabrication tools, or testing rooms to the institutional network."
-        badge={<Badge variant="teal">Custodian Registration</Badge>}
+        title="Register New Scientific Apparatus"
+        description="Publish research equipment, fabrication tools, cleanrooms, or testing facilities to the institutional consortium."
+        breadcrumbs={[
+          { label: "Custodian Portal", href: "/my-resources" },
+          { label: "Assets", href: "/my-resources" },
+          { label: "Register New Asset" },
+        ]}
+        badge={
+          <Badge variant="cyan" dot className="uppercase tracking-wider text-[11px]">
+            New Instrument Onboarding
+          </Badge>
+        }
       />
 
-      <div className="mt-8 max-w-4xl">
+      <div className="mt-8 max-w-4xl mx-auto">
         <ResourceForm institutions={institutions} />
       </div>
     </div>

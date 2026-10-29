@@ -28,16 +28,25 @@ async function EditResourceContent({ params }: EditResourcePageProps) {
   return (
     <div className="space-y-6">
       <PageHeader
-        title={`Edit Resource: ${resource.title}`}
+        title={`Edit Apparatus: ${resource.title}`}
         description="Update asset specifications, operating windows, eligibility rules, and availability."
+        breadcrumbs={[
+          { label: "Custodian Portal", href: "/my-resources" },
+          { label: "Assets", href: "/my-resources" },
+          { label: resource.title },
+        ]}
         badge={
-          <Badge variant={resource.status === "published" ? "teal" : "neutral"}>
+          <Badge
+            variant={resource.status === "published" ? "emerald" : "amber"}
+            dot
+            className="uppercase tracking-wider text-[11px]"
+          >
             {resource.status}
           </Badge>
         }
       />
 
-      <div className="mt-8 max-w-4xl">
+      <div className="mt-8 max-w-4xl mx-auto">
         <ResourceForm initialData={resource} institutions={institutions} />
       </div>
     </div>

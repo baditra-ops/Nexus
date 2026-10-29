@@ -81,23 +81,23 @@ export function ApprovalCard({ booking }: ApprovalCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden border-slate-200 shadow-xs dark:border-slate-800">
+    <Card className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80 shadow-md backdrop-blur-xl hover:border-cyan-500/30 transition-all">
       {/* Header with Apparatus Title & Current Status */}
-      <CardHeader className="p-5 pb-3 bg-slate-50/70 border-b border-slate-100 dark:bg-slate-900/40 dark:border-slate-800">
+      <CardHeader className="p-5 pb-3 bg-slate-50/80 border-b border-slate-100 dark:bg-slate-900/60 dark:border-slate-800">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
-              <Badge variant="navy" className="text-[10px] uppercase">
+              <span className="text-3xs font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20">
                 {resource?.resource_type || "Equipment"}
-              </Badge>
+              </span>
               <span className="text-xs text-slate-500 font-medium">
                 {resource?.institution?.name || "Shared Department"}
               </span>
             </div>
-            <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+            <CardTitle className="text-base font-black tracking-tight text-slate-900 dark:text-white">
               <Link
                 href={`/resources/${booking.resource_id}`}
-                className="hover:text-teal-700 dark:hover:text-teal-400"
+                className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
               >
                 {resource?.title}
               </Link>
@@ -106,41 +106,53 @@ export function ApprovalCard({ booking }: ApprovalCardProps) {
 
           <div className="flex items-center gap-2">
             {booking.is_overdue && (
-              <Badge variant="danger" className="text-xs">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-3xs font-bold bg-rose-500/10 text-rose-700 border border-rose-500/30">
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
                 Overdue ({booking.overdue_duration_text})
-              </Badge>
+              </span>
             )}
             {booking.status === "requested" && (
-              <Badge variant="warning">Pending Review</Badge>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-3xs font-bold bg-amber-500/15 text-amber-800 border border-amber-500/30 dark:text-amber-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                Pending Custodian Review
+              </span>
             )}
             {booking.status === "waitlisted" && (
-              <Badge variant="navy">
+              <Badge variant="navy" className="text-3xs font-bold">
                 Waitlisted {booking.waitlist_position ? `#${booking.waitlist_position}` : ""}
               </Badge>
             )}
             {booking.status === "approved" && (
-              <Badge variant="teal">Authorized & Confirmed</Badge>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-3xs font-bold bg-teal-500/15 text-teal-700 border border-teal-500/30 dark:text-teal-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-teal-500" />
+                Authorized & Confirmed
+              </span>
             )}
             {booking.status === "checked_out" && (
-              <Badge variant="teal">In Custody</Badge>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-3xs font-bold bg-emerald-500/15 text-emerald-700 border border-emerald-500/30 dark:text-emerald-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                In Borrower Custody
+              </span>
             )}
             {booking.status === "returned" && (
-              <Badge variant="warning">Returned — Inspection Pending</Badge>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-3xs font-bold bg-amber-500/15 text-amber-700 border border-amber-500/30 dark:text-amber-300">
+                Returned &bull; Inspection Pending
+              </span>
             )}
             {booking.status === "completed" && (
-              <Badge variant="success">Completed</Badge>
+              <Badge variant="success" className="text-3xs font-bold">Completed</Badge>
             )}
             {booking.status === "rejected" && (
-              <Badge variant="danger">Declined</Badge>
+              <Badge variant="danger" className="text-3xs font-bold">Declined</Badge>
             )}
             {booking.status === "cancelled" && (
-              <Badge variant="neutral">Cancelled</Badge>
+              <Badge variant="neutral" className="text-3xs font-bold">Cancelled</Badge>
             )}
 
             <button
               type="button"
               onClick={() => setExpandedDetails(!expandedDetails)}
-              className="text-slate-400 hover:text-slate-600 p-1"
+              className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer transition-colors"
               title="Toggle details"
             >
               {expandedDetails ? (

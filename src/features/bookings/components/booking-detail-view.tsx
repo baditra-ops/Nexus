@@ -191,32 +191,32 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
       )}
 
       {/* Header & Quick Action Card */}
-      <Card className="overflow-hidden border-slate-200 dark:border-slate-800">
-        <div className="p-6">
+      <Card className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-md backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80">
+        <div>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2.5">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Reservation #{booking.id.slice(0, 8)}
+                <span className="font-mono text-2xs font-extrabold uppercase tracking-widest text-slate-400 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800">
+                  RESERVATION #{booking.id.slice(0, 8)}
                 </span>
                 {renderStatusBadge()}
               </div>
-              <h1 className="mt-1 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+              <h1 className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white sm:text-3xl">
                 {resource?.title || "Apparatus Reservation"}
               </h1>
-              <div className="mt-2 flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-600 dark:text-slate-400">
-                <span className="flex items-center gap-1">
-                  <Building2 className="h-3.5 w-3.5 text-slate-400" />
+              <div className="mt-2.5 flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-600 dark:text-slate-400">
+                <span className="flex items-center gap-1.5 font-medium">
+                  <Building2 className="h-3.5 w-3.5 text-teal-500" />
                   {resource?.institution?.name || "Shared Laboratory"}
                 </span>
                 {resource?.location && (
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1.5 font-medium">
                     <MapPin className="h-3.5 w-3.5 text-slate-400" />
                     {resource.location}
                   </span>
                 )}
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5 text-slate-400" />
+                <span className="flex items-center gap-1.5 font-mono text-2xs">
+                  <Clock className="h-3.5 w-3.5 text-cyan-500" />
                   {formatDateTime(booking.start_time)} → {formatDateTime(booking.end_time)}
                 </span>
               </div>
@@ -230,7 +230,7 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
                   variant="teal"
                   size="sm"
                   onClick={() => setCheckoutOpen(true)}
-                  className="shadow-sm"
+                  className="rounded-xl shadow-xs px-4"
                 >
                   <ShieldCheck className="h-4 w-4 mr-1.5" />
                   {isCustodian ? "Perform Handover / Checkout" : "Acknowledge Safety & Checkout"}
@@ -243,7 +243,7 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
                   variant="teal"
                   size="sm"
                   onClick={() => setReturnOpen(true)}
-                  className="shadow-sm"
+                  className="rounded-xl shadow-xs px-4"
                 >
                   <RotateCcw className="h-4 w-4 mr-1.5" />
                   Submit Return
@@ -256,7 +256,7 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
                   variant="teal"
                   size="sm"
                   onClick={() => setInspectionOpen(true)}
-                  className="shadow-sm"
+                  className="rounded-xl shadow-xs px-4"
                 >
                   <ClipboardCheck className="h-4 w-4 mr-1.5" />
                   Inspect Return Condition
@@ -269,7 +269,7 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
                   variant="outline"
                   size="sm"
                   onClick={() => setIncidentOpen(true)}
-                  className="text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 dark:border-rose-900/60 dark:text-rose-400 dark:hover:bg-rose-950/30"
+                  className="rounded-xl text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 dark:border-rose-900/60 dark:text-rose-400 dark:hover:bg-rose-950/30"
                 >
                   <AlertTriangle className="h-4 w-4 mr-1.5 text-rose-500" />
                   Report Incident
@@ -283,7 +283,7 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
                   size="sm"
                   onClick={handleCancelBooking}
                   disabled={isCancelling}
-                  className="text-slate-500 hover:text-rose-600 dark:text-slate-400"
+                  className="rounded-xl text-slate-500 hover:text-rose-600 dark:text-slate-400"
                 >
                   <XCircle className="h-4 w-4 mr-1.5" />
                   Cancel
@@ -292,7 +292,7 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
 
               {/* Resource Catalog Link */}
               <Link href={`/resources/${resource?.id}`}>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="rounded-xl">
                   <ExternalLink className="h-3.5 w-3.5 mr-1" />
                   Apparatus Page
                 </Button>
@@ -300,13 +300,13 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
             </div>
           </div>
 
-          {/* Visual Lifecycle Stepper */}
+          {/* Visual Lifecycle Stepper with glowing connectors */}
           {currentPhaseIndex >= 0 && (
             <div className="mt-8 border-t border-slate-100 pt-6 dark:border-slate-800">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Booking Lifecycle Progress
+              <span className="text-2xs font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                CUSTODY LIFECYCLE PROGRESS
               </span>
-              <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4">
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                 {phases.map((phase, idx) => {
                   const isDone = idx < currentPhaseIndex;
                   const isCurrent = idx === currentPhaseIndex;
@@ -314,31 +314,31 @@ export function BookingDetailView({ booking, currentUserId }: BookingDetailViewP
                   return (
                     <div
                       key={phase.key}
-                      className={`relative flex items-center gap-2 rounded-lg p-2.5 transition-colors ${
+                      className={`relative flex items-center gap-2.5 rounded-xl p-3 transition-all ${
                         isCurrent
-                          ? "bg-teal-50 border border-teal-300 dark:bg-teal-950/40 dark:border-teal-800"
+                          ? "bg-teal-500/15 border border-teal-500/40 shadow-xs dark:bg-teal-950/50 dark:border-teal-700"
                           : isDone
-                          ? "bg-slate-50 dark:bg-slate-800/40"
-                          : "opacity-40"
+                          ? "bg-emerald-500/10 border border-emerald-500/20 dark:bg-emerald-950/20 dark:border-emerald-900/30"
+                          : "bg-slate-50 dark:bg-slate-800/20 border border-transparent opacity-40"
                       }`}
                     >
                       <div
-                        className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                           isDone
-                            ? "bg-teal-600 text-white"
+                            ? "bg-emerald-600 text-white"
                             : isCurrent
-                            ? "bg-teal-700 text-white animate-pulse"
+                            ? "bg-teal-600 text-white animate-pulse"
                             : "bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300"
                         }`}
                       >
                         {isDone ? <CheckCircle2 className="h-3.5 w-3.5" /> : idx + 1}
                       </div>
                       <span
-                        className={`text-xs font-semibold ${
+                        className={`text-xs font-bold truncate ${
                           isCurrent
-                            ? "text-teal-950 dark:text-teal-200"
+                            ? "text-teal-900 dark:text-teal-200"
                             : isDone
-                            ? "text-slate-800 dark:text-slate-200"
+                            ? "text-emerald-900 dark:text-emerald-200"
                             : "text-slate-400"
                         }`}
                       >

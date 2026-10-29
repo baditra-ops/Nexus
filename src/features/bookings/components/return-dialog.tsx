@@ -132,35 +132,35 @@ export function ReturnDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="return-dialog-title"
     >
-      <div className="relative w-full max-w-xl rounded-xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 my-8">
+      <div className="relative w-full max-w-xl rounded-2xl border border-white/15 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-xl my-8">
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+        <div className="flex items-start justify-between border-b border-white/10 pb-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-600 dark:bg-teal-950 dark:text-teal-400">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-950/80 border border-amber-500/30 text-amber-400 shadow-sm">
                 <RotateCcw className="h-5 w-5" />
               </span>
               <h2
                 id="return-dialog-title"
-                className="text-lg font-bold text-slate-900 dark:text-white"
+                className="text-lg font-bold text-white"
               >
                 Apparatus Return Confirmation
               </h2>
             </div>
-            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-xs text-slate-400">
               Submit return condition report for{" "}
-              <strong className="text-slate-800 dark:text-slate-200">{resource?.title}</strong>
+              <strong className="text-white">{resource?.title}</strong>
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            className="rounded-xl p-1.5 text-slate-400 hover:bg-white/10 hover:text-white transition-colors"
             aria-label="Close modal"
           >
             <X className="h-5 w-5" />

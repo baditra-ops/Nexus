@@ -66,35 +66,33 @@ export function ProfileView({ user, profile, stats }: ProfileViewProps) {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner: User Identity */}
-      <div className="rounded-xl border border-slate-200/90 bg-gradient-to-r from-slate-900 to-slate-800 p-6 text-white shadow-xs dark:border-slate-800">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-teal-600 font-extrabold text-xl text-white shadow-md">
+      {/* Top Banner: Futuristic Holographic Researcher Credential */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-6 sm:p-8 text-white shadow-xl">
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-teal-500 via-indigo-600 to-violet-500 font-black text-2xl text-white shadow-lg ring-4 ring-white/10">
               {(profile.full_name || "Member").slice(0, 2).toUpperCase()}
+              <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-emerald-500 border-2 border-slate-950 flex items-center justify-center">
+                <CheckCircle2 className="h-3 w-3 text-white" />
+              </div>
             </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-xl font-bold tracking-tight text-white">
+
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h2 className="text-2xl font-black tracking-tight text-white">
                   {profile.full_name || "Institutional Researcher"}
                 </h2>
-                <Badge
-                  variant={
-                    profile.role === "institution_admin"
-                      ? "navy"
-                      : profile.role === "resource_owner"
-                      ? "teal"
-                      : "neutral"
-                  }
-                  className="capitalize text-xs font-semibold"
-                >
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-2xs font-bold uppercase tracking-wider bg-violet-500/20 text-violet-300 border border-violet-500/30">
                   {profile.role.replace("_", " ")}
-                </Badge>
+                </span>
               </div>
-              <p className="mt-0.5 text-xs text-slate-300 font-mono">{user.email}</p>
-              <div className="mt-2 flex items-center gap-1.5 text-xs text-teal-300">
-                <Building2 className="h-3.5 w-3.5" />
-                <span>{profile.institution?.name || "TechCircuit Consortium Partner Institution"}</span>
+              <p className="text-xs text-slate-400 font-mono">{user.email}</p>
+              <div className="flex items-center gap-2 text-xs text-teal-300 pt-1">
+                <Building2 className="h-4 w-4 text-cyan-400" />
+                <span className="font-semibold">{profile.institution?.name || "TechCircuit Consortium Partner"}</span>
               </div>
             </div>
           </div>
@@ -104,7 +102,7 @@ export function ProfileView({ user, profile, stats }: ProfileViewProps) {
               type="submit"
               variant="outline"
               size="sm"
-              className="border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white text-xs"
+              className="rounded-xl border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-rose-950/40 hover:text-rose-300 hover:border-rose-900 text-xs px-4"
             >
               <LogOut className="h-3.5 w-3.5 mr-1.5 text-rose-400" />
               <span>Sign Out</span>
