@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import { ContentContainer } from "@/components/ui/content-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardDescription } from "@/components/ui/card";
@@ -32,6 +33,7 @@ import {
 } from "lucide-react";
 
 async function OverviewContent() {
+  await connection();
   const { user } = await getCurrentUser();
 
   const [{ resources: recentResources }, publishedCount, pendingApprovalsCount, pendingBookingsCount, activeLoansCount] =
