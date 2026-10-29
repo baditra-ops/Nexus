@@ -23,8 +23,7 @@ export async function getInstitutionMembers(
     .select(
       `
       *,
-      institution:institutions (*),
-      verifier:profiles!verified_by (id, full_name)
+      institution:institutions (*)
     `
     )
     .eq("institution_id", institutionId);
